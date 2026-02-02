@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { WalletActivity } from '@/types/wallet';
@@ -50,7 +51,7 @@ export default function ActivityChart({ activities }: ActivityChartProps) {
                             borderRadius: '8px',
                             padding: '10px',
                         }}
-                        formatter={(value: number) => [`${value.toFixed(4)} SOL`, 'Amount']}
+                        formatter={(value: any) => [`${(value ?? 0).toFixed(4)} SOL`, 'Amount']}
                     />
                     <Bar dataKey="amount" radius={[8, 8, 0, 0]}>
                         {chartData.map((entry, index) => (
