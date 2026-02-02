@@ -10,6 +10,7 @@ use solana_client::rpc_client::RpcClient;
 use solana_sdk::pubkey::Pubkey;
 use solana_transaction_status::UiTransactionEncoding;
 use std::sync::Arc;
+use tower_http::cors::{Any, CorsLayer};
 
 // Define response structures
 #[derive(Serialize, Deserialize)]
@@ -47,17 +48,34 @@ async fn main() {
         rpc_client: Arc::new(client),
     };
 
+    // Configure CORS
+    let cors = CorsLayer::new()
+        // Allow requests from your frontend (adjust port if needed)
+        .allow_origin(
+            "http://localhost:3000"
+                .parse::<http::HeaderValue>()
+                .unwrap(),
+        )
+        // Allow additional origins if needed (for production)
+        // .allow_origin("https://yourdomain.com".parse::<http::HeaderValue>().unwrap())
+        // Or allow any origin (use cautiously, only for development)
+        // .allow_origin(Any)
+        .allow_methods([http::Method::GET, http::Method::POST, http::Method::OPTIONS])
+        .allow_headers(Any);
+
     let app = Router::new()
         .without_v07_checks()
         .route(
             "/api/wallet/{address}/activities",
             get(handle_get_wallet_activities),
         )
+        .layer(cors) // Add CORS layer
         .with_state(state);
 
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:3004").await.unwrap();
 
-    println!("Server running on http://0.0.0.0:3000");
+    println!("Server running on http://0.0.0.0:3004");
+    println!("CORS enabled for http://localhost:3001");
     axum::serve(listener, app).await.unwrap();
 }
 
@@ -82,7 +100,7 @@ async fn handle_get_wallet_activities(
         client.get_signatures_for_address_with_config(
             &pubkey,
             solana_client::rpc_client::GetConfirmedSignaturesForAddress2Config {
-                limit: Some(1), // Adjust as needed
+                limit: Some(10), // Adjust as needed
                 ..Default::default()
             },
         )
