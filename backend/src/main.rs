@@ -9,9 +9,9 @@ use serde::{Deserialize, Serialize};
 use solana_client::rpc_client::RpcClient;
 use solana_sdk::pubkey::Pubkey;
 use solana_transaction_status::UiTransactionEncoding;
+use std::env;
 use std::sync::Arc;
 use tower_http::cors::{Any, CorsLayer};
-
 // Define response structures
 #[derive(Serialize, Deserialize)]
 struct WalletActivity {
@@ -52,7 +52,7 @@ async fn main() {
     let cors = CorsLayer::new()
         // Allow requests from your frontend (adjust port if needed)
         .allow_origin(
-            "http://localhost:3000"
+            "http://localhost:3000, https://solana-wallet-tracker-lime.vercel.app/"
                 .parse::<http::HeaderValue>()
                 .unwrap(),
         )
