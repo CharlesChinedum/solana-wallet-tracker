@@ -52,7 +52,8 @@ async fn main() {
     let cors = CorsLayer::new()
         // Allow requests from your frontend (adjust port if needed)
         .allow_origin(
-            "http://localhost:3000, https://solana-wallet-tracker-lime.vercel.app/"
+            // http://localhost:3000,
+            "https://solana-wallet-tracker-lime.vercel.app/"
                 .parse::<http::HeaderValue>()
                 .unwrap(),
         )
