@@ -80,7 +80,10 @@ async fn main() {
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3004").await.unwrap();
 
     println!("Server running on http://0.0.0.0:3004");
-    println!("CORS enabled for http://localhost:3001");
+    println!(
+        "CORS enabled for {} {}",
+        "http://localhost:3000", "https://solana-wallet-tracker-lime.vercel.app"
+    );
     axum::serve(listener, app).await.unwrap();
 }
 
