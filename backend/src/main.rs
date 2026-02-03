@@ -48,15 +48,19 @@ async fn main() {
         rpc_client: Arc::new(client),
     };
 
+    let origins = [
+        "http://localhost:3000"
+            .parse::<http::HeaderValue>()
+            .unwrap(),
+        "https://solana-wallet-tracker-lime.vercel.app"
+            .parse::<http::HeaderValue>()
+            .unwrap(),
+    ];
+
     // Configure CORS
     let cors = CorsLayer::new()
         // Allow requests from your frontend (adjust port if needed)
-        .allow_origin(
-            // http://localhost:3000,
-            "https://solana-wallet-tracker-lime.vercel.app/"
-                .parse::<http::HeaderValue>()
-                .unwrap(),
-        )
+        .allow_origin(origins)
         // Allow additional origins if needed (for production)
         // .allow_origin("https://yourdomain.com".parse::<http::HeaderValue>().unwrap())
         // Or allow any origin (use cautiously, only for development)
@@ -101,7 +105,7 @@ async fn handle_get_wallet_activities(
         client.get_signatures_for_address_with_config(
             &pubkey,
             solana_client::rpc_client::GetConfirmedSignaturesForAddress2Config {
-                limit: Some(10), // Adjust as needed
+                limit: Some(5), // Adjust as needed
                 ..Default::default()
             },
         )
