@@ -1,15 +1,9 @@
 // Basic structure
-use axum::{
-    Json, Router,
-    extract::Path,
-    http::{StatusCode, Uri},
-    routing::{get, post},
-};
+use axum::{Json, Router, extract::Path, http::StatusCode, routing::get};
 use serde::{Deserialize, Serialize};
 use solana_client::rpc_client::RpcClient;
 use solana_sdk::pubkey::Pubkey;
 use solana_transaction_status::UiTransactionEncoding;
-use std::env;
 use std::sync::Arc;
 use tower_http::cors::{Any, CorsLayer};
 // Define response structures
@@ -40,7 +34,6 @@ struct AppState {
 async fn main() {
     // Connect to Solana
     let rpc_url = "https://api.mainnet-beta.solana.com";
-    // let rpc_url = "https://solana-devnet.g.alchemy.com/v2/tYOztj9sJnFSZugKpSgy0";
     let client = RpcClient::new(rpc_url);
 
     // Wrap in Arc for shared state
