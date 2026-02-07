@@ -101,7 +101,7 @@ async fn handle_get_wallet_activities(
         client.get_signatures_for_address_with_config(
             &pubkey,
             solana_client::rpc_client::GetConfirmedSignaturesForAddress2Config {
-                limit: Some(5), // Adjust as needed
+                limit: Some(10),
                 ..Default::default()
             },
         )
